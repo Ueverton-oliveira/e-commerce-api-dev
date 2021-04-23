@@ -14,7 +14,6 @@ module RequestAPI
   end
 end
 
- 
 RSpec.configure do |config|
   config.include RequestAPI, type: :request
 end
