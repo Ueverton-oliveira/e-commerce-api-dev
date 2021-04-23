@@ -9,7 +9,12 @@ RSpec.describe "Admin::V1::Categories", type: :request do
 
     it "return all Categories" do
       get url, headers: auth_header(user)
-      expect(body_json['category']).to contain_exactly categories.as_json
+      expect(body_json['category']).to contain_exactly categories.as_json(only: %i(id name))
+    end
+
+    it "returns success status" do
+      get url, headers: auth_header(user)
+      expect(request).to have_http_status(:ok)
     end
   end
 end
