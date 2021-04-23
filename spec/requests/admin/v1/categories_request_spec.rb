@@ -22,13 +22,12 @@ RSpec.describe "Admin::V1::Categories", type: :request do
     let(:url) { "/admin/v1/categories" }
 
     context "with valid params " do
-      let(:category_params) { { attributes_for(:category)}.to_json }
+      let(:category_params) { { category: attributes_for(:category) }.to_json }
 
       it "adds a new Category" do
         expect do 
           post url, headers: auth_header(user), params: category_params
-          end.to change(Category, :count).by(1)
-        end
+        end.to change(Category, :count).by(1)
       end
 
       it 'returns last added Category' do
@@ -58,7 +57,11 @@ RSpec.describe "Admin::V1::Categories", type: :request do
         post url, headers: auth_header(user), params: category_invalid_params
         expect(body_json['errors']['fileds']).to have_key('name')
       end
+
+      it 'returns unprocessable_entity status' do
+        post url, headers: auth_header(user), params: category_invalid_params
+        expect(reponse).to have_http_status(:unprocessable_entity)
+      end
     end
   end
-
 end
