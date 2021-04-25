@@ -5,6 +5,6 @@ FactoryBot.define do
     status { :active }
     discount_value { rand(1..9) }
     max_use { 1 }
-    due_date { 3.days.from_now }
+    due_date { Time.zone.now + 1.day }
   end
 end

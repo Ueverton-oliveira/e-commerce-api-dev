@@ -10,4 +10,6 @@ class Product < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than: 0 }
   validates :image, presence: true
 
+  include NameSearchable
+  include Paginatable
 end
