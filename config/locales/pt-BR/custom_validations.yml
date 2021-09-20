@@ -2,4 +2,4 @@ pt-BR:
   activerecord:
     errors:
       messages:
-        future_date: "deve ser uma data futura"
+        future_date: "Deve ser uma data futura"
