@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :product_category do
-    product 
-    category 
+    product
+    category
   end
 end

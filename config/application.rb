@@ -27,7 +27,6 @@ module EcommerceApi
     # I18n config
     config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.{rb,yml}')]
     config.i18n.default_locale = :'pt-BR'
- 
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -41,5 +40,6 @@ module EcommerceApi
 
     config.autoload_paths += %W["#{config.root}/app/validators/"]
 
+    config.active_job.queue_adapter = :sidekiq
   end
 end

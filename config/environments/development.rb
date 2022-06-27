@@ -1,6 +1,9 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Configure hosts
+  config.hosts << /[\w|\d]*\.ngrok.io/
+
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
@@ -31,20 +34,20 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
+  config.action_mailer.perform_caching = false
+
   config.action_mailer.default_url_options = { host: "http://localhost:3000" }
+  Rails.application.routes.default_url_options[:host] = "http://localhost:3000"
 
   config.action_mailer.delivery_method = :smtp
-
   config.action_mailer.smtp_settings = {
     address: 'localhost',
     port: 1025,
   }
 
-  config.action_mailer.perform_caching = false
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
-
+  default_url_options[:host]
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
@@ -58,4 +61,7 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  JUNO_AUTH_URL = "https://sandbox.boletobancario.com"
+  JUNO_RESOURCE_URL = "https://sandbox.boletobancario.com/api-integration"
 end

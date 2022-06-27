@@ -1,4 +1,4 @@
-module Admin
+module Admin  
   class ProductSavingService
     class NotSavedProductError < StandardError; end
 
@@ -20,7 +20,7 @@ module Admin
         save!
       end
     end
-
+    
     def build_productable
       @product.productable ||= @product_params[:productable].camelcase.safe_constantize.new
       @product.productable.attributes = @productable_params

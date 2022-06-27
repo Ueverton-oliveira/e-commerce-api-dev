@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_20_200458) do
+ActiveRecord::Schema.define(version: 2021_03_15_110855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(version: 2021_09_20_200458) do
     t.string "code"
     t.integer "status"
     t.decimal "discount_value", precision: 5, scale: 2
-    t.integer "max_use"
     t.datetime "due_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -61,6 +60,68 @@ ActiveRecord::Schema.define(version: 2021_09_20_200458) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["system_requirement_id"], name: "index_games_on_system_requirement_id"
+  end
+
+  create_table "juno_charges", force: :cascade do |t|
+    t.string "key"
+    t.string "code"
+    t.string "number"
+    t.decimal "amount", precision: 10, scale: 2
+    t.string "status"
+    t.string "billet_url"
+    t.bigint "order_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id"], name: "index_juno_charges_on_order_id"
+  end
+
+  create_table "juno_credit_card_payments", force: :cascade do |t|
+    t.string "key"
+    t.datetime "release_date"
+    t.string "status"
+    t.string "reason"
+    t.bigint "charge_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["charge_id"], name: "index_juno_credit_card_payments_on_charge_id"
+  end
+
+  create_table "licenses", force: :cascade do |t|
+    t.string "key"
+    t.integer "platform"
+    t.integer "status"
+    t.bigint "game_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "line_item_id"
+    t.index ["game_id"], name: "index_licenses_on_game_id"
+    t.index ["line_item_id"], name: "index_licenses_on_line_item_id"
+  end
+
+  create_table "line_items", force: :cascade do |t|
+    t.integer "quantity"
+    t.decimal "payed_price", precision: 10, scale: 2
+    t.bigint "order_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "status"
+    t.index ["order_id"], name: "index_line_items_on_order_id"
+    t.index ["product_id"], name: "index_line_items_on_product_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "status"
+    t.decimal "subtotal", precision: 10, scale: 2
+    t.decimal "total_amount", precision: 10, scale: 2
+    t.integer "payment_type"
+    t.integer "installments"
+    t.bigint "user_id", null: false
+    t.bigint "coupon_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["coupon_id"], name: "index_orders_on_coupon_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "product_categories", force: :cascade do |t|
@@ -81,6 +142,7 @@ ActiveRecord::Schema.define(version: 2021_09_20_200458) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "status"
+    t.boolean "featured", default: false
     t.index ["productable_type", "productable_id"], name: "index_products_on_productable_type_and_productable_id"
   end
 
@@ -119,8 +181,27 @@ ActiveRecord::Schema.define(version: 2021_09_20_200458) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  create_table "wish_items", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_wish_items_on_product_id"
+    t.index ["user_id"], name: "index_wish_items_on_user_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "games", "system_requirements"
+  add_foreign_key "juno_charges", "orders"
+  add_foreign_key "juno_credit_card_payments", "juno_charges", column: "charge_id"
+  add_foreign_key "licenses", "games"
+  add_foreign_key "licenses", "line_items"
+  add_foreign_key "line_items", "orders"
+  add_foreign_key "line_items", "products"
+  add_foreign_key "orders", "coupons"
+  add_foreign_key "orders", "users"
   add_foreign_key "product_categories", "categories"
   add_foreign_key "product_categories", "products"
+  add_foreign_key "wish_items", "products"
+  add_foreign_key "wish_items", "users"
 end

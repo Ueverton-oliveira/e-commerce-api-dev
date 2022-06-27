@@ -1,4 +1,7 @@
 class SystemRequirement < ApplicationRecord
+  include LikeSearchable
+  include Paginatable
+
   has_many :games, dependent: :restrict_with_error
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
@@ -7,7 +10,4 @@ class SystemRequirement < ApplicationRecord
   validates :processor, presence: true
   validates :memory, presence: true
   validates :video_board, presence: true
-
-  include NameSearchable
-  include Paginatable
 end
