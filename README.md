@@ -1,8 +1,6 @@
-# E-commerce OpenSource Onebitcode =)
+# E-commerce
 
-This is an OpenSource API for a Game E-commerce project.
-
-It was first created with learning purposes, it's the code of the new Bootcamp from Onebitcode. But the idea behind this project is so bigger than us that we decided to open it for everyone.
+This is an API for a Game E-commerce project.
 
 It was designed thinking first in Game products, with digital delivery. But it's up to you to get this code and transform in anything you want.
 
